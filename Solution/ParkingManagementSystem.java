@@ -5,14 +5,14 @@ import java.util.*;
 
 class Car {
     String registrationNumber;
-    boolean category;
+    String category;
     String checkInTime;
     String checkOutTime;
     int parkingSlotNumber;
     int parkingFloor;
     int charges;
 
-    Car(String registrationNumber, String checkInTime, boolean category) {
+    Car(String registrationNumber, String checkInTime, String category) {
         this.registrationNumber = registrationNumber;
         this.checkInTime = checkInTime;
         this.category = category;
@@ -47,7 +47,7 @@ public class ParkingManagementSystem {
                         }
                     }
                     if (isSlotAvailable) {
-                        Car car = new Car(registrationNumber, checkInTime, true);
+                        Car car = new Car(registrationNumber, checkInTime, "R");
                         car.parkingSlotNumber = slot;
                         car.parkingFloor = floor;
                         cars.add(car);
@@ -62,7 +62,7 @@ public class ParkingManagementSystem {
                         }
                     }
                     if (isSlotAvailable) {
-                        Car car = new Car(registrationNumber, checkInTime, false);
+                        Car car = new Car(registrationNumber, checkInTime, "NR");
                         car.parkingSlotNumber = slot;
                         car.parkingFloor = floor;
                         cars.add(car);
@@ -104,7 +104,8 @@ public class ParkingManagementSystem {
 
     public void GENERATE_REPORT() {
 
-        allData.sort(Comparator.comparing((Car car) -> car.parkingSlotNumber)
+        allData.sort(Comparator.comparing((Car car) -> car.parkingFloor)
+                .thenComparing((Car car) -> car.parkingSlotNumber)
                 .thenComparing((Car car) -> car.checkInTime));
 
         System.out.println("PARKING SLOT, CAR NO, CHECK IN TIME, CHECK OUT TIME, CHARGES, CATEGORY");
@@ -123,15 +124,12 @@ public class ParkingManagementSystem {
     public static void main(String[] args) throws ParseException {
         Scanner sc = new Scanner(System.in);
 
-        ParkingManagementSystem parkingCars = new ParkingManagementSystem(1, 5,
-                "A-1 A-10 B-2 B-5 C-1 C-8 D-2 D-4 E-5 E-10");
+        ParkingManagementSystem parkingCars = new ParkingManagementSystem(2, 5,
+                "A-1 A-5 B-2 B-5 C-1 C-8 D-2 D-4 E-5 E-10");
 
         while (true) {
             String tempStr = sc.nextLine();
             String[] strArray = tempStr.split((" "));
-            for (String str : strArray) {
-                System.out.println(str);
-            }
 
             if (strArray.length == 4) {
                 if (strArray[3].equals("R"))
