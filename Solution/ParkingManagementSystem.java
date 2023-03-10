@@ -118,25 +118,48 @@ public class ParkingManagementSystem {
                     + " " + car.charges
                     + " " + car.category);
         }
+    }
 
+    public String convertTime(String prevString) {
+
+        if (prevString.lastIndexOf("am") != -1) {
+            return prevString.substring(0, prevString.length() - 2);
+        }
+
+        String newString;
+        int hour = Integer.parseInt(prevString.substring(0, 2));
+        if (hour != 12) {
+            hour += 12;
+        }
+
+        newString = hour + ":" + prevString.substring(3, 5);
+
+        return newString;
     }
 
     public static void main(String[] args) throws ParseException {
         Scanner sc = new Scanner(System.in);
 
-        ParkingManagementSystem parkingCars = new ParkingManagementSystem(2, 5,
-                "A-1 A-5 B-2 B-5 C-1 C-8 D-2 D-4 E-5 E-10");
+        int numberOfFloors = sc.nextInt();
+        int numberOfSlots = sc.nextInt();
+        String inputString = sc.nextLine();
+        System.out.println(inputString);
+
+        ParkingManagementSystem parkingCars = new ParkingManagementSystem(numberOfFloors, numberOfSlots,
+                inputString);
 
         while (true) {
             String tempStr = sc.nextLine();
             String[] strArray = tempStr.split((" "));
 
             if (strArray.length == 4) {
+                strArray[2] = parkingCars.convertTime(strArray[2]);
                 if (strArray[3].equals("R"))
                     System.out.println(parkingCars.checkIn(strArray[1], strArray[2], true));
                 else
                     System.out.println(parkingCars.checkIn(strArray[1], strArray[2], false));
             } else if (strArray.length == 3) {
+                strArray[2] = parkingCars.convertTime(strArray[2]);
                 System.out.println(parkingCars.checkOut(strArray[1], strArray[2]));
             } else if (strArray.length == 2) {
                 // Generate Report
